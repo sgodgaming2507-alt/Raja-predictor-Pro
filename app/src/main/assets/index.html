@@ -1,123 +1,8 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raja Game Predictor Pro</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #0b0f19;
-            color: #ffffff;
-            margin: 0;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .container {
-            width: 100%;
-            max-width: 280px;
-            background: #1e293b;
-            padding: 12px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            border: 1px solid #334155;
-        }
-        .header {
-            text-align: center;
-            font-size: 15px;
-            font-weight: bold;
-            color: #38bdf8;
-            margin-bottom: 8px;
-        }
-        .timer-box {
-            text-align: center;
-            background: #0f172a;
-            padding: 8px;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            border: 1px solid #475569;
-        }
-        .timer {
-            font-size: 22px;
-            font-weight: bold;
-            color: #f59e0b;
-        }
-        .period-text {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-bottom: 8px;
-            text-align: center;
-            background: #0f172a;
-            padding: 5px;
-            border-radius: 4px;
-        }
-        .prediction-card {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            padding: 12px;
-            border-radius: 6px;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .prediction-title {
-            font-size: 11px;
-            color: #bfdbfe;
-            margin-bottom: 3px;
-            text-transform: uppercase;
-        }
-        .prediction-result {
-            font-size: 16px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-        .confidence {
-            font-size: 10px;
-            color: #a7f3d0;
-            margin-top: 3px;
-        }
-        .history-box {
-            background: #0f172a;
-            padding: 6px;
-            border-radius: 6px;
-            font-size: 11px;
-            max-height: 110px;
-            overflow-y: auto;
-        }
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            border-bottom: 1px solid #1e293b;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <div class="header">👑 Raja Game Predictor 👑</div>
-
-        <div class="period-text" id="periodText">Syncing Period...</div>
-
-        <div class="timer-box">
-            <div style="font-size: 10px; color: #94a3b8;">Time remaining</div>
-            <div class="timer" id="timer">00:60</div>
-        </div>
-
-        <div class="prediction-card">
-            <div class="prediction-title">Raja Games WinGo 1 Min</div>
-            <div class="prediction-result" id="predictionDisplay">Analyzing...</div>
-            <div class="confidence" id="confidenceDisplay">Accuracy: 98% | Active</div>
-        </div>
-
-        <div style="font-size: 11px; margin-bottom: 3px; font-weight: bold; color: #cbd5e1;">History Log:</div>
-        <div class="history-box" id="historyBox"></div>
-    </div>
-
     <script>
         let pastResults = [];
         let lastProcessedBlock = "";
 
+        // WinGo 1 Min ka exact period generator jo game ke sath sync rahega
         function getExactGamePeriod() {
             let now = new Date();
             let year = now.getFullYear();
@@ -127,12 +12,17 @@
             let hours = now.getHours();
             let minutes = now.getMinutes();
             
+            // Din ki shuruat (00:00) se ab tak ke total minutes
             let totalMinutesToday = (hours * 60) + minutes;
-            let sequenceNumber = String(100000 + totalMinutesToday + 1).padStart(9, '0');
+            
+            // Screenshot ke format ke mutabiq YYYYMMDD + 1000 + 5-digit sequence
+            let sequenceVal = 10000 + totalMinutesToday;
+            let sequenceNumber = String(sequenceVal).padStart(5, '0');
 
-            return `${year}${month}${day}${sequenceNumber}`;
+            return `${year}${month}${day}1000${sequenceNumber}`;
         }
 
+        // Strict Official Rules (Number to Color & Size mapping)
         function getAttributes(num) {
             let size = num >= 5 ? "Big" : "Small";
             let color = "";
@@ -152,10 +42,14 @@
         function engineSync() {
             let now = new Date();
             let seconds = now.getSeconds();
+            
+            // 60-second countdown jo har minute ke end par zero ho
             let secondsLeft = 60 - seconds;
+            if (secondsLeft === 60) secondsLeft = 0;
             
             let currentPeriod = getExactGamePeriod();
 
+            // Timer display update
             document.getElementById('timer').innerText = `00:${secondsLeft < 10 ? '0' + secondsLeft : secondsLeft}`;
             document.getElementById('periodText').innerText = `Period ID: ${currentPeriod}`;
 
@@ -197,5 +91,3 @@
         setInterval(engineSync, 1000);
         engineSync();
     </script>
-</body>
-</html>
