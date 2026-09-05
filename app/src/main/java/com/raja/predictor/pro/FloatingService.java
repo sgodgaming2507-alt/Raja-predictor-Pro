@@ -30,7 +30,7 @@ public class FloatingService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        // Custom floating layout inflate karna
+        // Floating layout inflate karna
         floatingView = LayoutInflater.from(this).inflate(R.layout.floating_layout, null);
 
         int LAYOUT_TYPE;
@@ -49,30 +49,36 @@ public class FloatingService extends Service {
         );
 
         params.gravity = Gravity.TOP | Gravity.START;
-        params.x = 100;
-        params.y = 100;
+        params.x = 50;
+        params.y = 150;
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         windowManager.addView(floatingView, params);
 
-        // WebView setup floating panel ke andar
+        // Specific WebView find karna jo floating_layout.xml ke andar hai
         WebView floatingWebView = floatingView.findViewById(R.id.floatingWebView);
         WebSettings webSettings = floatingWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
+        webSettings.setAllowFileAccess(true);
+        
         floatingWebView.setWebViewClient(new WebViewClient());
+        
+        // Seedha index.html load karna
         floatingWebView.loadUrl("file:///android_asset/index.html");
 
-        // Close button logic
+        // Close button
         View closeBtn = floatingView.findViewById(R.id.closeBtn);
-        closeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopSelf();
-            }
-        });
+        if (closeBtn != null) {
+            closeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    stopSelf();
+                }
+            });
+        }
 
-        // Drag karke screen par kahin bhi move karne ka touch listener
+        // Dragging touch listener
         floatingView.setOnTouchListener(new View.OnTouchListener() {
             private int initialX;
             private int initialY;
