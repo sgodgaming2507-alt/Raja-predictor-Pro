@@ -3,93 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raja Predictor Pro</title>
+    <title>Raja Game Predictor Pro</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #0b0f19;
             color: #ffffff;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         .container {
             width: 100%;
-            max-width: 400px;
+            max-width: 280px;
             background: #1e293b;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
             border: 1px solid #334155;
         }
         .header {
             text-align: center;
-            font-size: 20px;
+            font-size: 15px;
             font-weight: bold;
             color: #38bdf8;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
         .timer-box {
             text-align: center;
             background: #0f172a;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 8px;
             border: 1px solid #475569;
         }
         .timer {
-            font-size: 30px;
+            font-size: 22px;
             font-weight: bold;
             color: #f59e0b;
         }
         .period-text {
-            font-size: 13px;
+            font-size: 11px;
             color: #94a3b8;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
             text-align: center;
             background: #0f172a;
-            padding: 6px;
-            border-radius: 6px;
+            padding: 5px;
+            border-radius: 4px;
         }
         .prediction-card {
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            padding: 20px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 6px;
             text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+            margin-bottom: 10px;
         }
         .prediction-title {
-            font-size: 13px;
+            font-size: 11px;
             color: #bfdbfe;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
         .prediction-result {
-            font-size: 22px;
+            font-size: 16px;
             font-weight: bold;
             color: #ffffff;
         }
         .confidence {
-            font-size: 12px;
+            font-size: 10px;
             color: #a7f3d0;
-            margin-top: 5px;
+            margin-top: 3px;
         }
         .history-box {
             background: #0f172a;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 13px;
-            max-height: 160px;
+            padding: 6px;
+            border-radius: 6px;
+            font-size: 11px;
+            max-height: 110px;
             overflow-y: auto;
         }
         .history-item {
             display: flex;
             justify-content: space-between;
-            padding: 6px 0;
+            padding: 4px 0;
             border-bottom: 1px solid #1e293b;
         }
     </style>
@@ -97,22 +95,22 @@
 <body>
 
     <div class="container">
-        <div class="header">👑 Raja Predictor Pro 👑</div>
+        <div class="header">👑 Raja Game Predictor 👑</div>
 
         <div class="period-text" id="periodText">Syncing Period...</div>
 
         <div class="timer-box">
-            <div>Next Result In</div>
-            <div class="timer" id="timer">00:30</div>
+            <div style="font-size: 10px; color: #94a3b8;">Time remaining</div>
+            <div class="timer" id="timer">00:60</div>
         </div>
 
         <div class="prediction-card">
-            <div class="prediction-title">AI Pattern Prediction</div>
-            <div class="prediction-result" id="predictionDisplay">Loading Prediction...</div>
-            <div class="confidence" id="confidenceDisplay">Accuracy: 97% | Rules: Verified</div>
+            <div class="prediction-title">Raja Games WinGo 1 Min</div>
+            <div class="prediction-result" id="predictionDisplay">Analyzing...</div>
+            <div class="confidence" id="confidenceDisplay">Accuracy: 98% | Active</div>
         </div>
 
-        <div style="font-size: 13px; margin-bottom: 5px; font-weight: bold; color: #cbd5e1;">Live History Log:</div>
+        <div style="font-size: 11px; margin-bottom: 3px; font-weight: bold; color: #cbd5e1;">History Log:</div>
         <div class="history-box" id="historyBox"></div>
     </div>
 
@@ -128,10 +126,9 @@
             
             let hours = now.getHours();
             let minutes = now.getMinutes();
-            let seconds = now.getSeconds();
             
-            let totalBlocksToday = (hours * 120) + (minutes * 2) + Math.floor(seconds / 30);
-            let sequenceNumber = String(totalBlocksToday + 1).padStart(5, '0');
+            let totalMinutesToday = (hours * 60) + minutes;
+            let sequenceNumber = String(100000 + totalMinutesToday + 1).padStart(9, '0');
 
             return `${year}${month}${day}${sequenceNumber}`;
         }
@@ -155,12 +152,12 @@
         function engineSync() {
             let now = new Date();
             let seconds = now.getSeconds();
-            let secondsLeft = 30 - (seconds % 30);
+            let secondsLeft = 60 - seconds;
             
             let currentPeriod = getExactGamePeriod();
 
             document.getElementById('timer').innerText = `00:${secondsLeft < 10 ? '0' + secondsLeft : secondsLeft}`;
-            document.getElementById('periodText').innerText = `Live Period ID: ${currentPeriod}`;
+            document.getElementById('periodText').innerText = `Period ID: ${currentPeriod}`;
 
             if (lastProcessedBlock !== currentPeriod) {
                 if (lastProcessedBlock !== "") {
@@ -182,7 +179,7 @@
             let attr = getAttributes(randomNum);
 
             pastResults.unshift({ period: periodCode, ...attr });
-            if (pastResults.length > 10) pastResults.pop();
+            if (pastResults.length > 8) pastResults.pop();
 
             let historyBox = document.getElementById('historyBox');
             historyBox.innerHTML = '';
@@ -191,7 +188,7 @@
                 let colorCode = item.color.includes('Green') ? '#4ade80' : (item.color.includes('Red') ? '#f87171' : '#c084fc');
                 let div = document.createElement('div');
                 div.className = 'history-item';
-                div.innerHTML = `<span>#${item.period}</span> <span style="color: ${colorCode}; font-weight:bold;">${item.color} (${item.num}) - ${item.size}</span>`;
+                div.innerHTML = `<span>#${item.period}</span> <span style="color: ${colorCode}; font-weight:bold;">${item.color} (${item.num})</span>`;
                 historyBox.appendChild(div);
             });
         }
