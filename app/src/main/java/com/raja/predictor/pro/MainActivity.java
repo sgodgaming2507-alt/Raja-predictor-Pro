@@ -24,13 +24,14 @@ public class MainActivity extends AppCompatActivity {
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.CanDrawOverlays(MainActivity.this)) {
+                // Corrected: canDrawOverlays (c is lowercase)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(MainActivity.this)) {
                     checkOverlayPermission();
                 } else {
                     Intent intent = new Intent(MainActivity.this, FloatingService.class);
                     startService(intent);
                     Toast.makeText(MainActivity.this, "Floating Panel Started!", Toast.LENGTH_SHORT).show();
-                    finish(); // App minimize ho jayegi aur floating window dikhegi
+                    finish();
                 }
             }
         });
@@ -38,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkOverlayPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.CanDrawOverlays(this)) {
+            // Corrected: canDrawOverlays (c is lowercase)
+            if (!Settings.canDrawOverlays(this)) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                         Uri.parse("package:" + getPackageName()));
                 startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
